@@ -6,6 +6,6 @@ and regression of bounding box height and width. The model
 avoids the complexity involved with anchor boxes and therefore
 a motivating approach.
 
-Sources: 
+Reference: 
 Xingyi Zhou, Dequan Wang, Philipp Kr¨ahenb¨uhl. 2019, Objects as
 Points
