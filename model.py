@@ -8,6 +8,10 @@ from torchvision.datasets import VOCDetection
 
 class CenterNet(nn.Module):
   def __init__(self, C):
+    '''
+    CenterNet model
+    with class C
+    '''
     super(CenterNet, self).__init__()
     
     # Pre-trained backbone
@@ -44,6 +48,7 @@ class CenterNet(nn.Module):
 
         
   def forward(self, x):
+    #transfer learning layers
     x0 = self.f0(x) # (..., 64, H/4, W/4)
     
     x1 = self.f1(x0) # (..., 64, H/4, W/4)
@@ -65,7 +70,7 @@ class CenterNet(nn.Module):
     up3 = F.relu(self.up_conv3(up3))
     
 
-    # Keypoint
+    # Keypoint obtained with heatmap
     hm = F.relu(self.hm_conv1(up3)) # (..., 256, H/4, W/4)
     hm = torch.sigmoid(self.hm_conv2(hm)) # (..., C, H/4, W/4)
     

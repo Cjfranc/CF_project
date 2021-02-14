@@ -4,14 +4,17 @@ from model import CenterNet
 from data import get_datasets
 from losses import L1_loss, focal_loss
 
+#train and validation loaders
 train_dl, val_dl = get_datasets("/home/student/CenterNet")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+#CenterNet model
 m = CenterNet(20)
 m = m.to(device)
 
 opt = torch.optim.Adam(m.parameters(), lr=0.000125)
+#learning rate decay after given number of epochs
 scheduler = torch.optim.lr_scheduler.MultiStepLR(opt, milestones=[45, 60], gamma=0.1)
 
 train_list = []
@@ -29,9 +32,10 @@ for epoch in range(70):
   loss_ = 0
   m.train()
 
+  #y ground-truth labels determined from feat() in utils
   for x, (y_hm, y_size) in train_dl:
     x = x.to(device)
-    y_hm = y_hm.to(device)
+    y_hm = y_hm.to(device) #target values found using gaus kernel
     y_size = y_size.to(device)
 
     opt.zero_grad()
@@ -48,7 +52,7 @@ for epoch in range(70):
   train_list.append(loss_)
   print("Train loss:", loss_)
   
-  # Eval
+  # Evaluation
   loss_ = 0
   m.eval()
   
